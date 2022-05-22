@@ -40,7 +40,6 @@ let finalScores = [0, 0];
 
 // Decides whether game can be played or not
 let playing = true;
-console.log(`Game is played? ${playing}`);
 
 /*
 THIRD: Implement functions (DRY)
@@ -77,17 +76,28 @@ const resetWinner = function () {
   player2Section.classList.remove("player--winner");
 };
 
+const initGame = function () {
+  hideTheDice();
+  player1Section.classList.add("player--active");
+  player2Section.classList.remove("player--active");
+  resetWinner();
+  score0El.textContent = 0;
+  score1El.textContent = 0;
+  player1CurrentScoreEl.textContent = 0;
+  player2CurrentScoreEl.textContent = 0;
+  playing = true;
+  console.log(`Game is played? ${playing}`);
+  finalScores = [0, 0];
+  currentScore = 0;
+  activePlayer = 0;
+};
+
 /*
 -------------------
 --- GAME BEGINS ---
 -------------------
 */
-// Set Final/Initial score to ZERO
-score0El.textContent = 0;
-score1El.textContent = 0;
-
-// Hide the dice appearing on screen
-hideTheDice();
+initGame();
 
 /*
 USER CLICKS ON "ROLL DICE" BUTTON
@@ -150,18 +160,4 @@ holdBtn.addEventListener("click", function () {
 /*
 USER CLICKS ON "NEW GAME" BUTTON
 */
-newGameBtn.addEventListener("click", function () {
-  hideTheDice();
-  player1Section.classList.add("player--active");
-  player2Section.classList.remove("player--active");
-  resetWinner();
-  score0El.textContent = 0;
-  score1El.textContent = 0;
-  player1CurrentScoreEl.textContent = 0;
-  player2CurrentScoreEl.textContent = 0;
-  playing = true;
-  console.log(`Game is played? ${playing}`);
-  finalScores = [0, 0];
-  currentScore = 0;
-  activePlayer = 0;
-});
+newGameBtn.addEventListener("click", initGame);
