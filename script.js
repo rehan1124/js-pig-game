@@ -19,6 +19,7 @@ let currentScore = 0;
 // 0 and 1 to set active inactive players
 let activePlayer = 0;
 let finalScores = [0, 0];
+let playing = true;
 
 const hideTheDice = function () {
   diceEl.classList.add("hidden");
@@ -50,50 +51,56 @@ score1El.textContent = 0;
 hideTheDice();
 
 rollDiceBtn.addEventListener("click", function () {
-  // Generate randowm dice roll
-  const dice = Math.trunc(Math.random() * 6 + 1);
+  if (playing) {
+    // Generate randowm dice roll
+    const dice = Math.trunc(Math.random() * 6 + 1);
 
-  // Display dice
-  showTheDice();
-  diceEl.src = `images/dice-${dice}.png`;
+    // Display dice
+    showTheDice();
+    diceEl.src = `images/dice-${dice}.png`;
 
-  // Dice value other than 1, update score.
-  if (dice !== 1) {
-    // Update current score
-    currentScore += dice;
-    document.getElementById(`current--${activePlayer}`).textContent =
-      currentScore;
-    // updateScore(player1CurrentScoreEl, currentScore);
+    // Dice value other than 1, update score.
+    if (dice !== 1) {
+      // Update current score
+      currentScore += dice;
+      document.getElementById(`current--${activePlayer}`).textContent =
+        currentScore;
+      // updateScore(player1CurrentScoreEl, currentScore);
 
-    // When dice value is 1, switch players.
-  } else {
-    switchPlayers(activePlayer);
-    document.getElementById(`current--${activePlayer}`).textContent = 0;
-    currentScore = 0;
-    activePlayer = activePlayer === 0 ? 1 : 0;
-    switchPlayers(activePlayer);
-    // document.getElementById(`current--${activePlayer}`).textContent =
-    //   currentScore;
+      // When dice value is 1, switch players.
+    } else {
+      switchPlayers(activePlayer);
+      document.getElementById(`current--${activePlayer}`).textContent = 0;
+      currentScore = 0;
+      activePlayer = activePlayer === 0 ? 1 : 0;
+      switchPlayers(activePlayer);
+      // document.getElementById(`current--${activePlayer}`).textContent =
+      //   currentScore;
+    }
   }
 });
 
 holdBtn.addEventListener("click", function () {
-  // Update score based on active player for the game
-  finalScores[activePlayer] += currentScore;
-  updateFinalScore(activePlayer, finalScores[activePlayer]);
+  if (playing) {
+    // Update score based on active player for the game
+    finalScores[activePlayer] += currentScore;
+    updateFinalScore(activePlayer, finalScores[activePlayer]);
 
-  if (finalScores[activePlayer] >= 20) {
-    document.getElementById(`name--${activePlayer}`).textContent = `Player ${
-      activePlayer + 1
-    } won the game !!!`;
-    document.querySelector(".player--active").classList.add("player--winner");
-    switchPlayers(activePlayer);
-  } else {
-    switchPlayers(activePlayer);
-    currentScore = 0;
-    document.getElementById(`current--${activePlayer}`).textContent =
-      currentScore;
-    activePlayer = activePlayer === 0 ? 1 : 0;
-    switchPlayers(activePlayer);
+    if (finalScores[activePlayer] >= 20) {
+      document.getElementById(`name--${activePlayer}`).textContent = `Player ${
+        activePlayer + 1
+      } won the game !!!`;
+      document.querySelector(".player--active").classList.add("player--winner");
+      switchPlayers(activePlayer);
+      playing = false;
+      hideTheDice();
+    } else {
+      switchPlayers(activePlayer);
+      currentScore = 0;
+      document.getElementById(`current--${activePlayer}`).textContent =
+        currentScore;
+      activePlayer = activePlayer === 0 ? 1 : 0;
+      switchPlayers(activePlayer);
+    }
   }
 });
